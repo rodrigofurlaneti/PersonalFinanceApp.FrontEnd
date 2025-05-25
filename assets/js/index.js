@@ -49,7 +49,7 @@ async function loadExpenses() {
     tbody.innerHTML = `<tr><td colspan="4">Carregando...</td></tr>`;
 
     try {
-        const response = await fetch('https://localhost:7124/api/expenses/async');
+        const response = await fetch(API_ROUTES.EXPENSES);
         if (!response.ok) throw new Error('Erro ao buscar dados da API');
 
         const expenses = await response.json();
@@ -79,7 +79,6 @@ async function loadExpenses() {
             `;
         });
 
-        // 🔥 Linha do total no final da tabela
         tbody.innerHTML += `
             <tr style="font-weight: bold; background-color: #f8f9fa;">
                 <td>Total</td>
