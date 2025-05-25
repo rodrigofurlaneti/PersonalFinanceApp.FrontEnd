@@ -1,26 +1,6 @@
 function loadContent(page) {
     const content = document.getElementById('main-content');
 
-    if (page === 'despesa') {
-        fetch(`pages/${page}.html`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Página não encontrada');
-                }
-                return response.text();
-            })
-            .then(html => {
-                content.innerHTML = html;
-                loadExpenses(); // 🔥 Chama a função que busca dados da API
-                window.location.hash = page;
-            })
-            .catch(error => {
-                content.innerHTML = `<h2>Erro</h2><p>${error.message}</p>`;
-            });
-
-        return;
-    }
-
     fetch(`pages/${page}.html`)
         .then(response => {
             if (!response.ok) {
@@ -28,15 +8,25 @@ function loadContent(page) {
             }
             return response.text();
         })
-        .then(data => {
-            content.innerHTML = data;
+        .then(html => {
+            content.innerHTML = html;
             window.location.hash = page;
+
+            // Verifica se é a página de despesa e carrega os dados
+            if (page === 'expense-list') {
+                loadExpenses();
+            }
+
+            // Verifica se é a página de cadastro de despesa e ativa o formulário
+            if (page === 'expense-insert') {
+                setupExpenseForm();
+            }
+
         })
         .catch(error => {
             content.innerHTML = `<h2>Erro</h2><p>${error.message}</p>`;
         });
 }
-
 
 async function loadExpenses() {
     const tbody = document.getElementById('expense-table-body');
@@ -93,3 +83,5 @@ async function loadExpenses() {
         console.error('Erro ao buscar despesas:', error);
     }
 }
+
+
