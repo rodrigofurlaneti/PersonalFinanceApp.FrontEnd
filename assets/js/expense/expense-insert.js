@@ -18,7 +18,7 @@ function setupExpenseForm() {
     // 🔥 Define a data de hoje nos campos de data
     setTodayDate();
 
-    form.addEventListener('submit', async function (e) {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const amountRaw = document.getElementById('amount').value || '0';
@@ -46,7 +46,7 @@ function setupExpenseForm() {
         console.log('Enviando dados para API:', data);
 
         try {
-            const response = await fetch(API_ROUTES.EXPENSES, {
+            const response = await fetch(API_ROUTES.EXPENSES_ASYNC, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

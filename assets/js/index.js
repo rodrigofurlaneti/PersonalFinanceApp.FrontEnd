@@ -22,6 +22,15 @@ function loadContent(page) {
                 setupExpenseForm();
             }
 
+            // Verifica se é a página da categoria de despesa e carrega os dados
+            if (page === 'expensecategory-list') {
+                loadExpensesCategories();
+            }
+
+            // Verifica se é a página de cadastro de categoria de despesa e ativa o formulário
+            if (page === 'expensecategory-insert') {
+                setupExpenseCategoryForm();
+            }
         })
         .catch(error => {
             content.innerHTML = `<h2>Erro</h2><p>${error.message}</p>`;
@@ -39,7 +48,7 @@ async function loadExpenses() {
     tbody.innerHTML = `<tr><td colspan="4">Carregando...</td></tr>`;
 
     try {
-        const response = await fetch(API_ROUTES.EXPENSES);
+        const response = await fetch(API_ROUTES.EXPENSES_ASYNC);
         if (!response.ok) throw new Error('Erro ao buscar dados da API');
 
         const expenses = await response.json();
@@ -84,4 +93,44 @@ async function loadExpenses() {
     }
 }
 
+async function loadExpensesCategories() {
+    const tbody = document.getElementById('expensecategory-table-body');
 
+    if (!tbody) {
+        console.error('Tabela não encontrada no HTML');
+        return;
+    }
+
+    tbody.innerHTML = `<tr><td colspan="4">Carregando...</td></tr>`;
+
+    try {
+        const response = await fetch(API_ROUTES.EXPENSE_CATEGORY_ASYNC);
+        if (!response.ok) throw new Error('Erro ao buscar dados da API');
+
+        const expensescategories = await response.json();
+
+        if (expensescategories.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4">Nenhuma despesa encontrada.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = '';
+
+        expensescategories.forEach(expensecategory => {
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${expensecategory.name}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning">Editar</button>
+                        <button class="btn btn-sm btn-danger">Excluir</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+    } catch (error) {
+        tbody.innerHTML = `<tr><td colspan="4">Erro ao carregar a categoria da despesas: ${error.message}</td></tr>`;
+        console.error('Erro ao buscar a categoria da despesas:', error);
+    }
+}
