@@ -1,10 +1,95 @@
-// 🔥 Função para aplicar máscara de valor monetário
+// 🔥 Utilitários reutilizáveis
 function maskMoney(input) {
     let value = input.value.replace(/\D/g, '');
     value = (value / 100).toFixed(2) + '';
     value = value.replace('.', ',');
     value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
     input.value = 'R$ ' + value;
+}
+
+function parseCurrency(value) {
+    return parseFloat(value.replace('R$ ', '').replace(/\./g, '').replace(',', '.')) || 0;
+}
+
+function getInputValue(id) {
+    const element = document.getElementById(id);
+    return element ? element.value : '';
+}
+
+function getCheckboxChecked(id) {
+    const element = document.getElementById(id);
+    return element ? element.checked : false;
+}
+
+function toIsoDate(value) {
+    return value ? new Date(value).toISOString() : null;
+}
+
+function nowIso() {
+    return new Date().toISOString();
+}
+
+// 🔥 Define a validação de todos os campos
+function validateExpenseFormFields() {
+    const requiredFields = [
+        { id: 'name', label: 'Nome' },
+        { id: 'description', label: 'Descrição' },
+        { id: 'amount', label: 'Valor' },
+        { id: 'dueDate', label: 'Data de Vencimento' },
+        { id: 'paidAt', label: 'Data de Pagamento' },
+        { id: 'expenseCategory', label: 'Categoria' }
+    ];
+
+    for (const field of requiredFields) {
+        const value = getInputValue(field.id);
+        if (!value || value.trim() === '') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campo obrigatório!',
+                text: `O campo "${field.label}" deve ser preenchido.`,
+            });
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// 🔥 Define a data de hoje nos campos de data
+function setTodayDate() {
+    const today = new Date().toISOString().split('T')[0];
+
+    const dueDateInput = document.getElementById('dueDate');
+    const paidAtInput = document.getElementById('paidAt');
+
+    if (dueDateInput) dueDateInput.value = today;
+    if (paidAtInput) paidAtInput.value = today;
+}
+
+// 🔥 Carrega categorias no select
+async function loadExpenseCategories() {
+    const select = document.getElementById('expenseCategory');
+    if (!select) return;
+
+    try {
+        const response = await fetch(API_ROUTES.EXPENSE_CATEGORY_ASYNC);
+        if (!response.ok) throw new Error('Erro ao carregar categorias.');
+
+        const categories = await response.json();
+
+        select.innerHTML = '<option value="">Selecione uma categoria</option>';
+
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.id;
+            option.textContent = cat.name;
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error('Erro ao buscar categorias de despesa:', error);
+        alert('Erro ao carregar categorias de despesa.');
+    }
 }
 
 // 🔥 Função que configura o formulário de cadastro
@@ -15,32 +100,26 @@ function setupExpenseForm() {
         return;
     }
 
-    // 🔥 Define a data de hoje nos campos de data
     setTodayDate();
+    loadExpenseCategories();
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        const amountRaw = document.getElementById('amount').value || '0';
-        const amountValue = amountRaw
-            .replace('R$ ', '')
-            .replace(/\./g, '')
-            .replace(',', '.');
-
-        const dueDateValue = document.getElementById('dueDate').value;
-        const paidAtValue = document.getElementById('paidAt').value;
+        // Valida os campos obrigatórios
+        if (!validateExpenseFormFields()) return;
 
         const data = {
             id: 0,
-            name: document.getElementById('name').value,
-            description: document.getElementById('description').value,
-            amount: parseFloat(amountValue) || 0,
-            dueDate: new Date(dueDateValue).toISOString(),
-            paidAt: paidAtValue ? new Date(paidAtValue).toISOString() : null,
-            expenseCategoryId: parseInt(document.getElementById('expenseCategoryId').value) || 0,
-            isActive: document.getElementById('isActive').checked,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            name: getInputValue('name'),
+            description: getInputValue('description'),
+            amount: parseCurrency(getInputValue('amount')),
+            dueDate: toIsoDate(getInputValue('dueDate')),
+            paidAt: toIsoDate(getInputValue('paidAt')),
+            expenseCategoryId: parseInt(getInputValue('expenseCategory')) || 0,
+            isActive: getCheckboxChecked('isActive'),
+            createdAt: nowIso(),
+            updatedAt: nowIso(),
         };
 
         console.log('Enviando dados para API:', data);
@@ -59,22 +138,22 @@ function setupExpenseForm() {
                 throw new Error(`Erro ao salvar despesa. Detalhe: ${errorDetail}`);
             }
 
-            alert('Despesa cadastrada com sucesso!');
-            loadContent('despesa'); // Volta para a lista de despesas
+            Swal.fire({
+                title: "Despesa cadastrada com sucesso!",
+                icon: "success",
+                draggable: true
+            });
+
+            loadContent('expense-list'); // Volta para a lista de despesas
+
         } catch (error) {
             console.error('Erro:', error);
-            alert('Erro ao cadastrar despesa: ' + error.message);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Erro ao cadastrar despesa!",
+                footer: `<a href="#">${error.message}</a>`
+            });
         }
     });
-}
-
-// 🔥 Função que define a data de hoje nos campos de data
-function setTodayDate() {
-    const today = new Date().toISOString().split('T')[0];
-
-    const dueDateInput = document.getElementById('dueDate');
-    const paidAtInput = document.getElementById('paidAt');
-
-    if (dueDateInput) dueDateInput.value = today;
-    if (paidAtInput) paidAtInput.value = today;
 }

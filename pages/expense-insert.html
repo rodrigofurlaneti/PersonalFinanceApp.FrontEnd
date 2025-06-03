@@ -2,41 +2,43 @@
 <p>Preencha os dados para cadastrar uma nova despesa.</p>
 
 <form id="expenseForm">
-  <div class="mb-3">
-    <label class="form-label">Nome</label>
-    <input type="text" class="form-control form-control-sm" id="name">
-  </div>
+    <div class="mb-3">
+        <label class="form-label">Nome</label>
+        <input type="text" class="form-control form-control-sm" id="name">
+    </div>
 
-  <div class="mb-3">
-    <label class="form-label">Descrição</label>
-    <input type="text" class="form-control form-control-sm" id="description">
-  </div>
+    <div class="mb-3">
+        <label class="form-label">Descrição</label>
+        <input type="text" class="form-control form-control-sm" id="description">
+    </div>
 
-  <div class="mb-3">
-    <label class="form-label">Valor (R$)</label>
-    <input type="text" class="form-control form-control-sm" id="amount" oninput="maskMoney(this)">
-  </div>
+    <div class="mb-3">
+        <label class="form-label">Valor (R$)</label>
+        <input type="text" class="form-control form-control-sm" id="amount" oninput="maskMoney(this)">
+    </div>
 
-  <div class="mb-3">
-    <label class="form-label">Data de Vencimento</label>
-    <input type="date" class="form-control form-control-sm" id="dueDate">
-  </div>
+    <div class="mb-3">
+        <label class="form-label">Data de Vencimento</label>
+        <input type="date" class="form-control form-control-sm" id="dueDate">
+    </div>
 
-  <div class="mb-3">
-    <label class="form-label">Data de Pagamento</label>
-    <input type="date" class="form-control form-control-sm" id="paidAt">
-  </div>
+    <div class="mb-3">
+        <label class="form-label">Data de Pagamento</label>
+        <input type="date" class="form-control form-control-sm" id="paidAt">
+    </div>
 
-  <div class="mb-3">
-    <label class="form-label">Categoria da Despesa (ID)</label>
-    <input type="number" class="form-control form-control-sm" id="expenseCategoryId">
-  </div>
+    <div class="mb-3">
+        <label class="form-label">Categoria da Despesa</label>
+        <select id="expenseCategory" name="expenseCategory" class="form-control form-control-sm">
+            <option value="">Selecione uma categoria</option>
+        </select>
+    </div>
 
-  <div class="mb-3 form-check">
-    <input type="checkbox" class="form-check-input form-control-sm" id="isActive" checked>
-    <label class="form-check-label">Ativo</label>
-  </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input form-control-sm" id="isActive" checked>
+        <label class="form-check-label">Ativo</label>
+    </div>
 
-  <button type="submit" class="btn btn-success btn-sm">Salvar</button>
-  <button type="button" class="btn btn-secondary btn-sm" onclick="loadContent('expense-list')">Voltar</button>
+    <button type="submit" class="btn btn-success btn-sm">Salvar</button>
+    <button type="button" class="btn btn-secondary btn-sm" onclick="loadContent('expense-list')">Voltar</button>
 </form>
