@@ -1,4 +1,35 @@
-// 🔥 Função que configura o formulário de cadastro
+// ✅ Utilitários globais
+function getInputValue(id) {
+    const element = document.getElementById(id);
+    return element ? element.value : '';
+}
+
+function getCheckboxChecked(id) {
+    const element = document.getElementById(id);
+    return element ? element.checked : false;
+}
+
+function nowIso() {
+    return new Date().toISOString();
+}
+
+// ✅ Validação para categoria de despesa
+function validateExpenseCategoryFormFields() {
+    const name = getInputValue('name');
+
+    if (!name || name.trim() === '') {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campo obrigatório!',
+            text: 'O campo "Nome" deve ser preenchido.',
+        });
+        return false;
+    }
+
+    return true;
+}
+
+// ✅ Função principal do formulário
 function setupExpenseCategoryForm() {
     const form = document.getElementById('expenseCategoryForm');
     if (!form) {
@@ -6,18 +37,17 @@ function setupExpenseCategoryForm() {
         return;
     }
 
-    // 🔥 Define a data de hoje nos campos de data
-    setTodayDate();
-
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
+        if (!validateExpenseCategoryFormFields()) return;
+
         const data = {
             id: 0,
-            name: document.getElementById('name').value,
-            isActive: document.getElementById('isActive').checked,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            name: getInputValue('name'),
+            isActive: getCheckboxChecked('isActive'),
+            createdAt: nowIso(),
+            updatedAt: nowIso(),
         };
 
         console.log('Enviando dados para API:', data);
@@ -33,14 +63,26 @@ function setupExpenseCategoryForm() {
 
             if (!response.ok) {
                 const errorDetail = await response.text();
-                throw new Error(`Erro ao salvar despesa. Detalhe: ${errorDetail}`);
+                throw new Error(`Erro ao salvar categoria. Detalhe: ${errorDetail}`);
             }
 
-            alert('Categoria de Despesa cadastrada com sucesso!');
-            loadContent('despesa'); // Volta para a lista de despesas
+            Swal.fire({
+                title: "Categoria cadastrada com sucesso!",
+                icon: "success",
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+            loadContent('expense', 'expensecategory-list');
+
         } catch (error) {
             console.error('Erro:', error);
-            alert('Erro ao cadastrar a categoria da despesa: ' + error.message);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Erro ao cadastrar a categoria!",
+                footer: `<a href="#">${error.message}</a>`
+            });
         }
     });
 }

@@ -1,47 +1,64 @@
-function loadContent(page) {
+function loadContent(model, page) {
+
     const content = document.getElementById('main-content');
 
-    fetch(`pages/${page}.html`)
+    const route = `pages/${model}/${page}.html`;
+
+    fetch(route)
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Página não encontrada');
-            }
+            if (!response.ok) throw new Error('Página não encontrada');
             return response.text();
         })
         .then(html => {
             content.innerHTML = html;
-            window.location.hash = page;
 
-            // Verifica se é a página de despesa e carrega os dados
-            if (page === 'expense-list') {
-                loadExpenses();
-            }
+            // Carrega o JS específico da página
+            const scriptPath = `assets/js/${model}/${page}.js`;
+            const script = document.createElement('script');
+            script.src = scriptPath;
+            script.onload = () => handlePageLoad(model, page);
+            script.onerror = () => {
+                content.innerHTML = `<h2>Erro</h2><p>Script ${scriptPath} não encontrado.</p>`;
+            };
+            document.body.appendChild(script);
 
-            // Verifica se é a página de cadastro de despesa e ativa o formulário
-            if (page === 'expense-insert') {
-                setupExpenseForm();
-            }
-
-            // Verifica se é a página da categoria de despesa e carrega os dados
-            if (page === 'expensecategory-list') {
-                loadExpensesCategories();
-            }
-
-            // Verifica se é a página de cadastro de categoria de despesa e ativa o formulário
-            if (page === 'expensecategory-insert') {
-                setupExpenseCategoryForm();
-            }
+            // Atualiza o hash da URL
+            window.location.hash = `${model}/${page}`;
         })
         .catch(error => {
             content.innerHTML = `<h2>Erro</h2><p>${error.message}</p>`;
         });
 }
 
+
+function handlePageLoad(model, page) {
+    switch (`${model}/${page}`) {
+        case 'expense/expense-list':
+            loadExpenses();
+            break;
+
+        case 'expense/expense-insert':
+            setupExpenseForm();
+            break;
+
+        case 'expensecategory/expensecategory-list':
+            loadExpensesCategories();
+            break;
+
+        case 'expensecategory/expensecategory-insert':
+            setupExpenseCategoryForm();
+            break;
+
+        default:
+            console.warn(`Nenhuma ação definida para ${model}/${page}`);
+            break;
+    }
+}
+
 async function loadExpenses() {
     const tbody = document.getElementById('expense-table-body');
-
     if (!tbody) {
-        console.error('Tabela não encontrada no HTML');
+        console.error('Tabela de despesas não encontrada');
         return;
     }
 
@@ -59,12 +76,10 @@ async function loadExpenses() {
         }
 
         tbody.innerHTML = '';
-
         let total = 0;
 
         expenses.forEach(expense => {
             total += expense.amount;
-
             tbody.innerHTML += `
                 <tr>
                     <td>${expense.description}</td>
@@ -86,7 +101,6 @@ async function loadExpenses() {
                 <td></td>
             </tr>
         `;
-
     } catch (error) {
         tbody.innerHTML = `<tr><td colspan="4">Erro ao carregar despesas: ${error.message}</td></tr>`;
         console.error('Erro ao buscar despesas:', error);
@@ -95,32 +109,30 @@ async function loadExpenses() {
 
 async function loadExpensesCategories() {
     const tbody = document.getElementById('expensecategory-table-body');
-
     if (!tbody) {
-        console.error('Tabela não encontrada no HTML');
+        console.error('Tabela de categorias não encontrada');
         return;
     }
 
-    tbody.innerHTML = `<tr><td colspan="4">Carregando...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="2">Carregando...</td></tr>`;
 
     try {
         const response = await fetch(API_ROUTES.EXPENSE_CATEGORY_ASYNC);
         if (!response.ok) throw new Error('Erro ao buscar dados da API');
 
-        const expensescategories = await response.json();
+        const categories = await response.json();
 
-        if (expensescategories.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4">Nenhuma despesa encontrada.</td></tr>';
+        if (categories.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="2">Nenhuma categoria encontrada.</td></tr>';
             return;
         }
 
         tbody.innerHTML = '';
 
-        expensescategories.forEach(expensecategory => {
-
+        categories.forEach(category => {
             tbody.innerHTML += `
                 <tr>
-                    <td>${expensecategory.name}</td>
+                    <td>${category.name}</td>
                     <td>
                         <button class="btn btn-sm btn-warning">Editar</button>
                         <button class="btn btn-sm btn-danger">Excluir</button>
@@ -128,9 +140,8 @@ async function loadExpensesCategories() {
                 </tr>
             `;
         });
-
     } catch (error) {
-        tbody.innerHTML = `<tr><td colspan="4">Erro ao carregar a categoria da despesas: ${error.message}</td></tr>`;
-        console.error('Erro ao buscar a categoria da despesas:', error);
+        tbody.innerHTML = `<tr><td colspan="2">Erro ao carregar categorias: ${error.message}</td></tr>`;
+        console.error('Erro ao buscar categorias:', error);
     }
 }

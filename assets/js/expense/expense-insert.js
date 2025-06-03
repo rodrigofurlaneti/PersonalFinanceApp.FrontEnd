@@ -144,7 +144,7 @@ function setupExpenseForm() {
                 draggable: true
             });
 
-            loadContent('expense-list'); // Volta para a lista de despesas
+            loadContent('expense', 'expense-list'); // Volta para a lista de despesas
 
         } catch (error) {
             console.error('Erro:', error);
