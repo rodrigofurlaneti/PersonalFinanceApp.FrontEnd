@@ -1,20 +1,33 @@
-<h2>Despesa</h2>
-<p>Gerenciamento de despesas cadastradas.</p>
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-0">Despesas</h2>
+                    <small class="text-muted">Gerenciamento de despesas cadastradas.</small>
+                </div>
+                <button id="btn-expense-insert" class="btn btn-primary btn-sm" onclick="loadContent('expense', 'expense-insert')">
+                    ➕ Nova Despesa
+                </button>
+            </div>
 
-<button id="btn-expense-insert" name="btn-expense-insert" class="btn btn-primary mb-2 btn-sm" onclick="loadContent('expense', 'expense-insert')">Nova Despesa</button>
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Descrição</th>
-            <th>Valor</th>
-            <th>Data</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody id="expense-table-body">
-        <tr>
-            <td colspan="4">Carregando...</td>
-        </tr>
-    </tbody>
-</table>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered align-middle">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Valor (R$)</th>
+                                <th>Data</th>
+                                <th class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expense-table-body">
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Carregando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
