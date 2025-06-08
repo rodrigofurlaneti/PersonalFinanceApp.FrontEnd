@@ -1,3 +1,6 @@
+    
+    <link href="assets/css/expense/expense-list.css" rel="stylesheet">
+
     <div class="container mt-4">
         <div class="card">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
@@ -15,9 +18,30 @@
                     <table class="table table-striped table-hover table-bordered align-middle">
                         <thead class="table-secondary">
                             <tr>
-                                <th>Descrição</th>
-                                <th>Valor (R$)</th>
-                                <th>Data</th>
+                                <th>
+                                    Nome
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_NAME_ASC_ASYNC)" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_NAME_DESC_ASYNC)" class="sort-button desc">▼</button>
+                                </th>
+                                <th>
+                                    Descrição
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_DESCRIPTION_ASC_ASYNC)" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_DESCRIPTION_DESC_ASYNC)" class="sort-button desc">▼</button>
+                                </th>
+                                <th>
+                                    Valor (R$)
+                                    <!-- opcional -->
+                                </th>
+                                <th>
+                                    Vencimento
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_DUEDATE_ASC_ASYNC)" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_DUEDATE_DESC_ASYNC)" class="sort-button desc">▼</button>
+                                </th>
+                                <th>
+                                    Pagamento
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_PAIDAT_ASC_ASYNC)" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_PAIDAT_DESC_ASYNC)" class="sort-button desc">▼</button>
+                                </th>
                                 <th class="text-center">Ações</th>
                             </tr>
                         </thead>
