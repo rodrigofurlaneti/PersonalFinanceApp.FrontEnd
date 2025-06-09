@@ -84,17 +84,17 @@ function renderExpenses(expenses, reloadUrl) {
 
         tbody.innerHTML += `
             <tr>
-                <td>${expense.name}</td>
-                <td>${expense.description}</td>
-                <td>
+                <td class="text-center font-size">${expense.name}</td>
+                <td class="text-center font-size">${expense.description}</td>
+                <td class="text-center font-size">
                     <span class="badge" style="background-color: ${categoryColor}; color: #fff;">
                         ${categoryName}
                     </span>
                 </td>
-                <td>R$ ${expense.amount.toFixed(2)}</td>
-                <td>${new Date(expense.dueDate).toLocaleDateString()}</td>
-                <td>${new Date(expense.paidAt).toLocaleDateString()}</td>
-                <td class="text-center">
+                <td class="text-center font-size">R$ ${expense.amount.toFixed(2)}</td>
+                <td class="text-center font-size">${new Date(expense.dueDate).toLocaleDateString()}</td>
+                <td class="text-center font-size">${new Date(expense.paidAt).toLocaleDateString()}</td>
+                <td class="text-center font-size">
                     <button class="btn btn-warning btn-sm" title="Editar">
                         <i class="fas fa-edit"></i>
                     </button>
