@@ -1,3 +1,30 @@
+.table-responsive {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+td:nth-child(4), th:nth-child(4) {
+    text-align: right;
+}
+
+#expense-table-body {
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+}
+#expense-table-body.loaded {
+    opacity: 1;
+}
+
+
 .sort-button {
     border: none;
     background: transparent;
@@ -113,6 +140,16 @@
     flex: 1 1 48%;
     padding: 10px;
 }
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #fff;
+}
+
+.bg-secondary { background-color: #6c757d; }
 
 
 @keyframes pulse {

@@ -1,3 +1,4 @@
+const categoryColorMap = {};
 let categoryMap = {}; // id → nome
 
 // 🔁 Função padrão: carrega despesas sem ordenação
@@ -55,11 +56,15 @@ async function loadExpensesOrdered(apiUrl) {
         tbody.innerHTML = `<tr><td colspan="6">Erro: ${error.message}</td></tr>`;
         console.error('Erro ao carregar despesas ordenadas:', error);
     }
+
+    document.getElementById('expense-table-body').classList.add('loaded');
 }
 
 // ♻️ Função reutilizável para renderizar despesas
 function renderExpenses(expenses, reloadUrl) {
+
     const tbody = document.getElementById('expense-table-body');
+
     tbody.innerHTML = '';
 
     if (!expenses || expenses.length === 0) {
@@ -73,21 +78,33 @@ function renderExpenses(expenses, reloadUrl) {
         total += expense.amount;
 
         const categoryName = categoryMap[expense.expenseCategoryId] || 'Sem categoria';
+        
+        // Cor padrão se não tiver no gráfico
+        const categoryColor = categoryColorMap[categoryName] || '#6c757d'; 
 
         tbody.innerHTML += `
             <tr>
                 <td>${expense.name}</td>
                 <td>${expense.description}</td>
-                <td>${categoryName}</td>
+                <td>
+                    <span class="badge" style="background-color: ${categoryColor}; color: #fff;">
+                        ${categoryName}
+                    </span>
+                </td>
                 <td>R$ ${expense.amount.toFixed(2)}</td>
                 <td>${new Date(expense.dueDate).toLocaleDateString()}</td>
                 <td>${new Date(expense.paidAt).toLocaleDateString()}</td>
-                <td>
-                    <button class="btn btn-sm btn-warning">Editar</button>
+                <td class="text-center">
+                    <button class="btn btn-warning btn-sm" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
                     <button class="btn btn-sm btn-danger btn-expense-delete" 
+                            title="Excluir"
                             data-id="${expense.id}" 
                             data-name="${expense.description}"
-                            data-reload="${reloadUrl}">Excluir</button>
+                            data-reload="${reloadUrl}">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
                 </td>
             </tr>
         `;
@@ -95,6 +112,7 @@ function renderExpenses(expenses, reloadUrl) {
 
     tbody.innerHTML += `
         <tr style="font-weight: bold; background-color: #f8f9fa;">
+            <td></td>
             <td></td>
             <td>Total</td>
             <td>R$ ${total.toFixed(2)}</td>
@@ -151,6 +169,8 @@ function renderExpenses(expenses, reloadUrl) {
             }
         });
     });
+
+    document.getElementById('expense-table-body').classList.add('loaded');
 }
 
 // 🔥 Função carrega as categorias
@@ -228,7 +248,10 @@ function renderExpenseChartByCategory(expenses) {
 
     Object.entries(categoryTotals).forEach(([category, amount], index) => {
         const percentage = ((amount / total) * 100).toFixed(2);
-
+        
+        // ← salva a cor da categoria
+        categoryColorMap[category] = colors[index % colors.length]; 
+        
         const bar = document.createElement('div');
         bar.classList.add('expense-bar');
 
@@ -340,13 +363,11 @@ function renderExpensePieChart(expenses) {
 
 
 function renderAllExpenseViews(expenses, reloadUrl) {
-    // ✅ Chama a função para renderizar as despesas
-    renderExpenses(expenses, reloadUrl);
     
     // ✅ Chama a função para renderizar o gráfico de despesas 
     renderExpenseChart(expenses);
     
-    // ✅ Chama a função para renderizar o gráfico de despesas por categoria
+    // ✅ Chama a função para renderizar o gráfico de despesas por categoria ← gera o categoryColorMap
     renderExpenseChartByCategory(expenses);
 
     // ✅ Chama a função para renderizar o gráfico de despesas pizza por nome
@@ -354,4 +375,7 @@ function renderAllExpenseViews(expenses, reloadUrl) {
 
     // ✅ Chama a função para renderizar o gráfico de despesas Donut por categoria
     renderExpenseDonutChart(expenses);
+
+    // ✅ Chama a função para renderizar as despesas ← agora sim, com as cores certas
+    renderExpenses(expenses, reloadUrl);
 }
