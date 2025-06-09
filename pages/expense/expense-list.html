@@ -29,8 +29,14 @@
                                     <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_DESCRIPTION_DESC_ASYNC)" class="sort-button desc">▼</button>
                                 </th>
                                 <th>
+                                    Categoria
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_EXPENSECATEGORYID_ASC_ASYNC)" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_EXPENSECATEGORYID_DESC_ASYNC)" class="sort-button desc">▼</button>
+                                </th>
+                                <th>
                                     Valor (R$)
-                                    <!-- opcional -->
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_AMOUNT_ASC_ASYNC)" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_AMOUNT_DESC_ASYNC)" class="sort-button desc">▼</button>
                                 </th>
                                 <th>
                                     Vencimento
@@ -51,6 +57,31 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <div id="expense-dual-chart-container" class="mt-4">
+                        <div class="chart-column">
+                            <h5 class="text-muted">Distribuição das despesas</h5>
+                            <div id="expense-chart"></div>
+                        </div>
+                        <div class="chart-column text-center">
+                            <h5 class="text-muted">Distribuição das despesas "Pizza"</h5>
+                            <canvas id="expense-pie-chart" width="300" height="300" class="chart-canvas"></canvas>
+                            <div id="expense-pie-legend" class="legend-box"></div>
+                        </div>
+                    </div>
+
+                    <div id="expense-category-dual-chart-container" class="mt-4">
+                        <div class="chart-column">
+                            <h5 class="text-muted">Distribuição das despesas por categoria</h5>
+                            <div id="expense-category-chart"></div>
+                        </div>
+                        <div class="chart-column text-center">
+                            <h5 class="text-muted">Distribuição por categoria "Donut"</h5>
+                            <canvas id="expense-donut-chart" width="300" height="300" class="chart-canvas"></canvas>
+                            <div id="expense-donut-legend" class="legend-box"></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

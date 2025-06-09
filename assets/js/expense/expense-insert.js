@@ -35,8 +35,8 @@ function validateExpenseFormFields() {
         { id: 'name', label: 'Nome' },
         { id: 'description', label: 'Descrição' },
         { id: 'amount', label: 'Valor' },
-        { id: 'dueDate', label: 'Data de Vencimento' },
-        { id: 'paidAt', label: 'Data de Pagamento' },
+        { id: 'dueDate', label: 'Vencimento' },
+        { id: 'paidAt', label: 'Pagamento' },
         { id: 'expenseCategory', label: 'Categoria' }
     ];
 
@@ -157,3 +157,5 @@ function setupExpenseForm() {
         }
     });
 }
+
+
