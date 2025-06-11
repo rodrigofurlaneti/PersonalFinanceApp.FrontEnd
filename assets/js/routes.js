@@ -4,16 +4,8 @@ const API_BASE_URL = "https://localhost:7124/api";
 
 const API_ROUTES = {
     EXPENSES_ASYNC: `${API_BASE_URL}/expenses/async`,
-    EXPENSES_GETALL_ORDERBY_NAME_ASC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByNameAsc`,
-    EXPENSES_GETALL_ORDERBY_NAME_DESC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByNameDesc`,
-    EXPENSES_GETALL_ORDERBY_DESCRIPTION_ASC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByDescriptionAsc`,
-    EXPENSES_GETALL_ORDERBY_DESCRIPTION_DESC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByDescriptionDesc`,
-    EXPENSES_GETALL_ORDERBY_DUEDATE_ASC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByDueDateAsc`,
-    EXPENSES_GETALL_ORDERBY_DUEDATE_DESC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByDueDateDesc`,
-    EXPENSES_GETALL_ORDERBY_PAIDAT_ASC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByPaidAtAsc`,
-    EXPENSES_GETALL_ORDERBY_PAIDAT_DESC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByPaidAtDesc`,
-    EXPENSES_GETALL_ORDERBY_AMOUNT_ASC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByAmountAsc`,
-    EXPENSES_GETALL_ORDERBY_AMOUNT_DESC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByAmountDesc`,
+    EXPENSES_ORDERED_ASYNC: (orderBy, direction = 'asc') => `${API_BASE_URL}/expenses/async/ordered?orderBy=${orderBy}&direction=${direction}`,
+    EXPENSES_ORDERED_SYNC: (orderBy, direction = 'asc') => `${API_BASE_URL}/expenses/sync/ordered?orderBy=${orderBy}&direction=${direction}`,
     EXPENSES_GETALL_ORDERBY_EXPENSECATEGORYID_ASC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByExpenseCategoryIdAsc`,
     EXPENSES_GETALL_ORDERBY_EXPENSECATEGORYID_DESC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByExpenseCategoryIdDesc`,
     EXPENSES_SYNC: `${API_BASE_URL}/expenses/sync`,

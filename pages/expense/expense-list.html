@@ -20,33 +20,33 @@
                             <tr>
                                 <th class="text-center font-size">
                                     Nome
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_NAME_ASC_ASYNC)" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_NAME_DESC_ASYNC)" class="sort-button desc">▼</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Name', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Name', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">
                                     Descrição
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_DESCRIPTION_ASC_ASYNC)" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_DESCRIPTION_DESC_ASYNC)" class="sort-button desc">▼</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Description', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Description', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">
                                     Categoria
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_EXPENSECATEGORYID_ASC_ASYNC)" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_EXPENSECATEGORYID_DESC_ASYNC)" class="sort-button desc">▼</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('ExpenseCategoryId', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('ExpenseCategoryId', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">
                                     Valor (R$)
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_AMOUNT_ASC_ASYNC)" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_AMOUNT_DESC_ASYNC)" class="sort-button desc">▼</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Amount', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Amount', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">
                                     Vencimento
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_DUEDATE_ASC_ASYNC)" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_DUEDATE_DESC_ASYNC)" class="sort-button desc">▼</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('DueDate', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('DueDate', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">
                                     Pagamento
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_PAIDAT_ASC_ASYNC)" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_GETALL_ORDERBY_PAIDAT_DESC_ASYNC)" class="sort-button desc">▼</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('PaidAt', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('PaidAt', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">Ações</th>
                             </tr>
