@@ -12,6 +12,10 @@ function loadContent(model, page) {
 
             // Carrega JS específico
             const scriptPath = `assets/js/${model}/${page}.js`;
+
+            // ✅ Remove script anterior se já estiver carregado
+            document.querySelectorAll(`script[src="${scriptPath}"]`).forEach(s => s.remove());
+
             const script = document.createElement('script');
             script.src = scriptPath;
             script.onload = () => handlePageLoad(model, page);
