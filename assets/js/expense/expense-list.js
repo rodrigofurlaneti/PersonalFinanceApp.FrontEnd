@@ -95,7 +95,9 @@ function renderExpenses(expenses, reloadUrl) {
                 <td class="text-center font-size">${new Date(expense.dueDate).toLocaleDateString()}</td>
                 <td class="text-center font-size">${new Date(expense.paidAt).toLocaleDateString()}</td>
                 <td class="text-center font-size">
-                    <button class="btn btn-warning btn-sm" title="Editar">
+                    <button class="btn btn-warning btn-sm btn-expense-edit" 
+                            title="Editar"
+                            data-id="${expense.id}">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-sm btn-danger btn-expense-delete" 
@@ -170,8 +172,19 @@ function renderExpenses(expenses, reloadUrl) {
         });
     });
 
+    // ✅ Adicione isso dentro da função renderExpenses
+    document.querySelectorAll('.btn-expense-edit').forEach(button => {
+        button.addEventListener('click', function () {
+            const expenseId = this.getAttribute('data-id');
+            console.log(`Editando despesa ID: ${expenseId}`);
+            localStorage.setItem('editingExpenseId', expenseId);
+            loadContent('expense', 'expense-update');
+        });
+    });
+
     document.getElementById('expense-table-body').classList.add('loaded');
 }
+
 
 // 🔥 Função carrega as categorias
 async function loadCategoryMap() {

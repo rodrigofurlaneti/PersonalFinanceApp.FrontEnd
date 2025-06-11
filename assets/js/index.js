@@ -35,6 +35,10 @@ function handlePageLoad(model, page) {
         case 'expense/expense-insert':
             setupExpenseForm();
             break;
+        case 'expense/expense-update':
+            loadExpenseDataToForm();
+            setupExpenseEditSubmit();
+            break;
         case 'expensecategory/expensecategory-list':
             loadExpensesCategories();
             break;
