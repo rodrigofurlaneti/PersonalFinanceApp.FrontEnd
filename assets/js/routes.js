@@ -6,6 +6,7 @@ const API_ROUTES = {
     EXPENSES_ASYNC: `${API_BASE_URL}/expenses/async`,
     EXPENSES_ORDERED_ASYNC: (orderBy, direction = 'asc') => `${API_BASE_URL}/expenses/async/ordered?orderBy=${orderBy}&direction=${direction}`,
     EXPENSES_ORDERED_SYNC: (orderBy, direction = 'asc') => `${API_BASE_URL}/expenses/sync/ordered?orderBy=${orderBy}&direction=${direction}`,
+    EXPENSES_FILTERED_ASYNC: (filterBy, value) => `${API_BASE_URL}/expenses/async/filtered?filterBy=${filterBy}&value=${encodeURIComponent(value)}`,
     EXPENSES_GETALL_ORDERBY_EXPENSECATEGORYID_ASC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByExpenseCategoryIdAsc`,
     EXPENSES_GETALL_ORDERBY_EXPENSECATEGORYID_DESC_ASYNC: `${API_BASE_URL}/expenses/async/GetAllOrderByExpenseCategoryIdDesc`,
     EXPENSES_SYNC: `${API_BASE_URL}/expenses/sync`,

@@ -374,6 +374,44 @@ function renderExpensePieChart(expenses) {
     }, 50);
 }
 
+async function filterExpensesByText() {
+  const input = document.getElementById("filterText").value.trim().toLowerCase();
+  const filterBy = document.querySelector('input[name="filterType"]:checked').value;
+
+  if (input === "") {
+    await loadExpenses(); // carrega tudo
+    return;
+  }
+
+  try {
+    const response = await fetch(API_ROUTES.EXPENSES_ASYNC);
+    const data = await response.json();
+
+    const filtered = data.filter(expense => {
+      const valueToCheck = (filterBy === "name" ? expense.name : expense.description) || "";
+      return valueToCheck.toLowerCase().includes(input);
+    });
+
+    renderAllExpenseViews(filtered, API_ROUTES.EXPENSES_ASYNC);
+  } catch (error) {
+    console.error("Erro ao filtrar despesas:", error);
+  }
+}
+
+// 🔁 Aplica debounce ao filtro de texto
+let debounceTimeout;
+
+function debounceFilterExpenses(delay = 300) {
+  const tbody = document.getElementById("expense-table-body");
+  if (tbody) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">Filtrando...</td></tr>`;
+  }
+
+  clearTimeout(debounceTimeout);
+  debounceTimeout = setTimeout(() => {
+    filterExpensesByText(); // ou loadFilteredExpenses()
+  }, delay);
+}
 
 function renderAllExpenseViews(expenses, reloadUrl) {
     
