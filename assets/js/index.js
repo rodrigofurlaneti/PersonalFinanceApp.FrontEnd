@@ -52,6 +52,20 @@ function handlePageLoad(model, page) {
         case 'expense-category/expense-category-update':
             loadExpenseCategoryDataToForm();
             setupExpenseCategoryEditSubmit();
+            break;
+                case 'expense/expense-update':
+            loadExpenseDataToForm();
+            setupExpenseEditSubmit();
+            break;
+        case 'income-category/income-category-list':
+            loadIncomesCategories();
+            break;
+        case 'income-category/income-category-insert':
+            setupIncomeCategoryForm();
+            break;
+        case 'income-category/income-category-update':
+            loadIncomeCategoryDataToForm();
+            setupIncomeCategoryEditSubmit();
         default:
             console.warn(`Nenhuma ação definida para ${model}/${page}`);
             break;

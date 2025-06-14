@@ -53,7 +53,7 @@ function setupIncomeCategoryForm() {
         console.log('Enviando dados para API:', data);
 
         try {
-            const response = await fetch(API_ROUTES.INCOME_CATEGORY_SYNC, {
+            const response = await fetch(API_ROUTES.INCOME_CATEGORIES_SYNC, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
