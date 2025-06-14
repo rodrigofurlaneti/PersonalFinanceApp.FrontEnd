@@ -49,6 +49,9 @@ function handlePageLoad(model, page) {
         case 'expense-category/expense-category-insert':
             setupExpenseCategoryForm();
             break;
+        case 'expense-category/expense-category-update':
+            loadExpenseCategoryDataToForm();
+            setupExpenseCategoryEditSubmit();
         default:
             console.warn(`Nenhuma ação definida para ${model}/${page}`);
             break;

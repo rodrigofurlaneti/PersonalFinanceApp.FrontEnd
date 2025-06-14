@@ -72,7 +72,7 @@ async function loadExpenseCategories() {
     if (!select) return;
 
     try {
-        const response = await fetch(API_ROUTES.EXPENSE_CATEGORY_ASYNC);
+        const response = await fetch(API_ROUTES.EXPENSE_CATEGORIES_ASYNC);
         if (!response.ok) throw new Error('Erro ao carregar categorias.');
 
         const categories = await response.json();
@@ -139,7 +139,7 @@ function setupExpenseForm() {
             }
 
             Swal.fire({
-                title: "Despesa cadastrada com sucesso!",
+                title: `A despesa ${data.name} foi cadastrada com sucesso!`,
                 icon: "success",
                 draggable: true
             });
@@ -151,7 +151,7 @@ function setupExpenseForm() {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Erro ao cadastrar despesa!",
+                text: `Erro ao cadastrar a despesa ${data.name}!`,
                 footer: `<a href="#">${error.message}</a>`
             });
         }
@@ -183,7 +183,7 @@ async function loadExpenseDataToForm() {
 
         // Carrega categorias
         const categorySelect = document.getElementById('expenseCategory');
-        const catResponse = await fetch(API_ROUTES.EXPENSE_CATEGORY_ASYNC);
+        const catResponse = await fetch(API_ROUTES.EXPENSE_CATEGORIES_ASYNC);
         const categories = await catResponse.json();
 
         categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
@@ -243,7 +243,7 @@ function setupExpenseEditSubmit() {
 
             Swal.fire({
                 icon: 'success',
-                title: 'Despesa atualizada com sucesso!',
+                title: `A despesa ${updatedExpense.name} foi atualizada com sucesso!`,
                 timer: 2000,
                 showConfirmButton: false
             });

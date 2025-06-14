@@ -10,13 +10,13 @@ async function loadExpensesCategories() {
 
     try {
        
-        const response = await fetch(API_ROUTES.EXPENSES_CATEGORIES_ASYNC);
+        const response = await fetch(API_ROUTES.EXPENSE_CATEGORIES_ASYNC);
 
         if (!response.ok) throw new Error('Erro ao buscar dados da API');
 
-        const expensescategories = await response.json();
+        const expenseCategories = await response.json();
 
-        renderAllExpenseCategoryViews(expensescategories, API_ROUTES.EXPENSES_CATEGORIES_ASYNC);
+        renderAllExpenseCategoryViews(expenseCategories, API_ROUTES.EXPENSE_CATEGORIES_ASYNC);
 
     } catch (error) {
         tbody.innerHTML = `<tr><td colspan="6">Erro ao carregar categoria despesas: ${error.message}</td></tr>`;
@@ -39,11 +39,11 @@ async function loadExpensesCategoriesOrdered(apiUrl) {
         
         if (!response.ok) throw new Error('Erro ao buscar dados ordenados da API');
 
-        const expensescategories = await response.json();
+        const expenseCategories = await response.json();
         
-        console.log('Despesas ordenadas:', expensescategories);
+        console.log('Categoria de despesas ordenadas:', expenseCategories);
 
-        renderAllExpenseCategoryViews(expensescategories, API_ROUTES.EXPENSES_CATEGORIES_ASYNC);
+        renderAllExpenseCategoryViews(expenseCategories, API_ROUTES.EXPENSE_CATEGORIES_ASYNC);
 
     } catch (error) {
         tbody.innerHTML = `<tr><td colspan="6">Erro: ${error.message}</td></tr>`;
@@ -54,32 +54,32 @@ async function loadExpensesCategoriesOrdered(apiUrl) {
 }
 
 // ♻️ Função reutilizável para renderizar despesas
-function renderExpensesCategories(expensescategories, reloadUrl) {
+function renderExpensesCategories(expenseCategories, reloadUrl) {
 
     const tbody = document.getElementById('expense-category-table-body');
 
     tbody.innerHTML = '';
 
-    if (!expensescategories || expensescategories.length === 0) {
+    if (!expenseCategories || expenseCategories.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6">Nenhuma categoria de despesa encontrada.</td></tr>';
         return;
     }
 
-    expensescategories.forEach(expensecategory => {
+    expenseCategories.forEach(expenseCategory => {
 
         tbody.innerHTML += `
             <tr>
-                <td class="text-center font-size">${expensecategory.name}</td>
+                <td class="text-center font-size">${expenseCategory.name}</td>
                 <td class="text-center font-size">
                     <button class="btn btn-warning btn-sm btn-expense-category-edit" 
                             title="Editar"
-                            data-id="${expensecategory.id}">
+                            data-id="${expenseCategory.id}">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-sm btn-danger btn-expense-category-delete" 
                             title="Excluir"
-                            data-id="${expensecategory.id}" 
-                            data-name="${expensecategory.name}"
+                            data-id="${expenseCategory.id}" 
+                            data-name="${expenseCategory.name}"
                             data-reload="${reloadUrl}">
                         <i class="fas fa-trash-alt"></i>
                     </button>
@@ -97,12 +97,12 @@ function renderExpensesCategories(expensescategories, reloadUrl) {
 
     document.querySelectorAll('.btn-expense-category-delete').forEach(button => {
         button.addEventListener('click', async function () {
-            const expenseId = this.getAttribute('data-id');
-            const expenseName = this.getAttribute('data-name');
+            const expenseCategoryId = this.getAttribute('data-id');
+            const expenseCategoryName = this.getAttribute('data-name');
             const reloadUrl = this.getAttribute('data-reload');
 
             const result = await Swal.fire({
-                title: `Você deseja excluir a categoria de despesa "${expenseName}"?`,
+                title: `Você deseja excluir a categoria de despesa "${expenseCategoryName}"?`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Sim',
@@ -111,7 +111,7 @@ function renderExpensesCategories(expensescategories, reloadUrl) {
 
             if (result.isConfirmed) {
                 try {
-                    const deleteResponse = await fetch(`${API_ROUTES.EXPENSES_CATEGORIES_ASYNC}/${expenseId}`, {
+                    const deleteResponse = await fetch(`${API_ROUTES.EXPENSE_CATEGORIES_ASYNC}/${expenseCategoryId}`, {
                         method: 'DELETE',
                     });
 
@@ -126,7 +126,7 @@ function renderExpensesCategories(expensescategories, reloadUrl) {
                     });
 
                     // Recarrega a partir da rota usada (ordenada ou não)
-                    if (reloadUrl === API_ROUTES.EXPENSES_CATEGORIES_ASYNC) {
+                    if (reloadUrl === API_ROUTES.EXPENSE_CATEGORIES_ASYNC) {
                         loadExpensesCategories();
                     } else {
                         loadExpensesCategoriesOrdered(reloadUrl);
@@ -146,9 +146,9 @@ function renderExpensesCategories(expensescategories, reloadUrl) {
     // ✅ Adicione isso dentro da função renderExpenses
     document.querySelectorAll('.btn-expense-category-edit').forEach(button => {
         button.addEventListener('click', function () {
-            const expenseId = this.getAttribute('data-id');
-            console.log(`Editando categoria de despesa ID: ${expenseId}`);
-            localStorage.setItem('editingExpenseCategoryId', expenseId);
+            const expenseCategoryId = this.getAttribute('data-id');
+            console.log(`Editando categoria de despesa ID: ${expenseCategoryId}`);
+            localStorage.setItem('editingExpenseCategoryId', expenseCategoryId);
             loadContent('expense-category', 'expense-category-update');
         });
     });
@@ -167,15 +167,15 @@ async function filterExpensesCategoriesByText() {
   }
 
   try {
-    const response = await fetch(API_ROUTES.EXPENSES_CATEGORIES_ASYNC);
+    const response = await fetch(API_ROUTES.EXPENSE_CATEGORIES_ASYNC);
     const data = await response.json();
 
-    const filtered = data.filter(expense => {
-      const valueToCheck = (filterBy === "name" ? expense.name : expense.name) || "";
+    const filtered = data.filter(expenseCategory => {
+      const valueToCheck = (filterBy === "name" ? expenseCategory.name : expenseCategory.name) || "";
       return valueToCheck.toLowerCase().includes(input);
     });
 
-    renderAllExpenseCategoryViews(filtered, API_ROUTES.EXPENSES_CATEGORIES_ASYNC);
+    renderAllExpenseCategoryViews(filtered, API_ROUTES.EXPENSE_CATEGORIES_ASYNC);
   } catch (error) {
     console.error("Erro ao filtrar categoria despesas:", error);
   }
@@ -198,8 +198,8 @@ function debounceFilterExpensesCategories(delay = 300) {
     }, delay);
 }
 
-function renderAllExpenseCategoryViews(expensescategories, reloadUrl) {
+function renderAllExpenseCategoryViews(expensesCategories, reloadUrl) {
  
     // ✅ Chama a função para renderizar as despesas ← agora sim, com as cores certas
-    renderExpensesCategories(expensescategories, reloadUrl);
+    renderExpensesCategories(expensesCategories, reloadUrl);
 }

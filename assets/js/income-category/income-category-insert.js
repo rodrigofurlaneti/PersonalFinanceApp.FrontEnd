@@ -14,7 +14,7 @@ function nowIso() {
 }
 
 // ✅ Validação para categoria de despesa
-function validateExpenseCategoryFormFields() {
+function validateIncomeCategoryFormFields() {
     const name = getInputValue('name');
 
     if (!name || name.trim() === '') {
@@ -30,8 +30,8 @@ function validateExpenseCategoryFormFields() {
 }
 
 // ✅ Função principal do formulário
-function setupExpenseCategoryForm() {
-    const form = document.getElementById('expenseCategoryForm');
+function setupIncomeCategoryForm() {
+    const form = document.getElementById('incomeCategoryForm');
     if (!form) {
         console.error('Formulário não encontrado');
         return;
@@ -40,7 +40,7 @@ function setupExpenseCategoryForm() {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        if (!validateExpenseCategoryFormFields()) return;
+        if (!validateIncomeCategoryFormFields()) return;
 
         const data = {
             id: 0,
@@ -53,7 +53,7 @@ function setupExpenseCategoryForm() {
         console.log('Enviando dados para API:', data);
 
         try {
-            const response = await fetch(API_ROUTES.EXPENSE_CATEGORIES_SYNC, {
+            const response = await fetch(API_ROUTES.INCOME_CATEGORY_SYNC, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -63,24 +63,24 @@ function setupExpenseCategoryForm() {
 
             if (!response.ok) {
                 const errorDetail = await response.text();
-                throw new Error(`Erro ao salvar a categoria de despesa ${data.name}. Detalhe erro: ${errorDetail}`);
+                throw new Error(`Erro ao salvar categoria de renda ${data.name}. Detalhe erro: ${errorDetail}`);
             }
 
             Swal.fire({
-                title: `A categoria de despesa ${data.name} foi cadastrada com sucesso!`,
+                title: `A categoria de renda ${data.name} cadastrada com sucesso!`,
                 icon: "success",
                 timer: 2000,
                 showConfirmButton: false
             });
 
-            loadContent('expense-category', 'expense-category-list');
+            loadContent('income-category', 'income-category-list');
 
         } catch (error) {
             console.error('Erro:', error);
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: `Erro ao cadastrar a categoria de depesta ${data.name}!`,
+                text: `Erro ao cadastrar a categoria de renda ${data.name}!`,
                 footer: `<a href="#">${error.message}</a>`
             });
         }

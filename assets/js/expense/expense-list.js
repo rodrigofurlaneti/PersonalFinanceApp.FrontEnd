@@ -149,7 +149,7 @@ function renderExpenses(expenses, reloadUrl) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Excluído!',
-                        text: 'Despesa excluída com sucesso.',
+                        text: `A despesa ${expenseName} foi excluída com sucesso.`,
                         timer: 4500,
                         showConfirmButton: false,
                     });
@@ -165,7 +165,7 @@ function renderExpenses(expenses, reloadUrl) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Erro',
-                        text: `Falha ao excluir despesa: ${error.message}`,
+                        text: `Falha ao excluir a despesa ${expenseName}, Erro: ${error.message}`,
                     });
                 }
             }
@@ -176,7 +176,6 @@ function renderExpenses(expenses, reloadUrl) {
     document.querySelectorAll('.btn-expense-edit').forEach(button => {
         button.addEventListener('click', function () {
             const expenseId = this.getAttribute('data-id');
-            console.log(`Editando despesa ID: ${expenseId}`);
             localStorage.setItem('editingExpenseId', expenseId);
             loadContent('expense', 'expense-update');
         });
@@ -189,7 +188,7 @@ function renderExpenses(expenses, reloadUrl) {
 // 🔥 Função carrega as categorias
 async function loadCategoryMap() {
     try {
-        const response = await fetch(API_ROUTES.EXPENSES_CATEGORIES_ASYNC);
+        const response = await fetch(API_ROUTES.EXPENSE_CATEGORIES_ASYNC);
         if (!response.ok) throw new Error('Erro ao carregar categorias');
 
         const categories = await response.json();

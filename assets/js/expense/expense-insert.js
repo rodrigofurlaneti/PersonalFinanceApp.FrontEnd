@@ -72,7 +72,7 @@ async function loadExpenseCategories() {
     if (!select) return;
 
     try {
-        const response = await fetch(API_ROUTES.EXPENSE_CATEGORY_ASYNC);
+        const response = await fetch(API_ROUTES.EXPENSE_CATEGORIES_ASYNC);
         if (!response.ok) throw new Error('Erro ao carregar categorias.');
 
         const categories = await response.json();
@@ -135,11 +135,11 @@ function setupExpenseForm() {
 
             if (!response.ok) {
                 const errorDetail = await response.text();
-                throw new Error(`Erro ao salvar despesa. Detalhe: ${errorDetail}`);
+                throw new Error(`Erro ao salvar despesa ${data.name}. Detalhe: ${errorDetail}`);
             }
 
             Swal.fire({
-                title: "Despesa cadastrada com sucesso!",
+                title: `A despesa ${data.name} foi cadastrada com sucesso!`,
                 icon: "success",
                 draggable: true
             });
@@ -151,7 +151,7 @@ function setupExpenseForm() {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Erro ao cadastrar despesa!",
+                text: `Erro ao cadastrar a despesa ${data.name}!`,
                 footer: `<a href="#">${error.message}</a>`
             });
         }
