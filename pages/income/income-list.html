@@ -6,7 +6,7 @@
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <div>
                     <h2 class="mb-0">Rendas</h2>
-                    <small class="text-muted">Gerenciamento de despesas cadastradas.</small>
+                    <small class="text-muted">Gerenciamento de rendas cadastradas.</small>
                 </div>
                 <button id="btn-income-insert" class="btn btn-primary btn-sm" onclick="loadContent('income', 'income-insert')">
                     ➕ Nova Renda
@@ -16,7 +16,7 @@
             <div class="card p-3 mb-3">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <input type="text" id="filterText" class="form-control form-control-sm w-100" placeholder="🔍 Digite para filtrar..." onkeyup="debounceFilterExpenses()"/>
+                        <input type="text" id="filterText" class="form-control form-control-sm w-100" placeholder="🔍 Digite para filtrar..." onkeyup="debounceFilterIncomes()"/>
                     </div>
                     <div class="col-md-6 d-flex justify-content-end mt-2 mt-md-0">
                         <div class="form-check me-3">
@@ -34,33 +34,33 @@
                             <tr>
                                 <th class="text-center font-size">
                                     Nome
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Name', 'asc'))" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Name', 'desc'))" class="sort-button desc">▼</button>
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('Name', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('Name', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">
                                     Descrição
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Description', 'asc'))" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Description', 'desc'))" class="sort-button desc">▼</button>
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('Description', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('Description', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">
                                     Categoria
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('ExpenseCategoryId', 'asc'))" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('ExpenseCategoryId', 'desc'))" class="sort-button desc">▼</button>
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('IncomeCategoryId', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('IncomeCategoryId', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">
                                     Valor (R$)
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Amount', 'asc'))" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('Amount', 'desc'))" class="sort-button desc">▼</button>
-                                </th>
-                                <th class="text-center font-size">
-                                    Previsto
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('IncomeDate', 'asc'))" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('IncomeDate', 'desc'))" class="sort-button desc">▼</button>
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('Amount', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('Amount', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">
                                     Pagamento
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('ReceivedAt', 'asc'))" class="sort-button asc">▲</button>
-                                    <button onclick="loadExpensesOrdered(API_ROUTES.EXPENSES_ORDERED_ASYNC('ReceivedAt', 'desc'))" class="sort-button desc">▼</button>
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('IncomeDate', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('IncomeDate', 'desc'))" class="sort-button desc">▼</button>
+                                </th>
+                                <th class="text-center font-size">
+                                    Recebimento
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('ReceivedAt', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadIncomesOrdered(API_ROUTES.INCOMES_ORDERED_ASYNC('ReceivedAt', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">Ações</th>
                             </tr>
@@ -74,7 +74,7 @@
 
                     <div id="income-category-dual-chart-container" class="mt-4">
                         <div class="chart-column">
-                            <h5 class="text-muted">Distribuição das despesas por categoria</h5>
+                            <h5 class="text-muted">Distribuição das rendas por categoria</h5>
                             <div id="income-category-chart"></div>
                         </div>
                         <div class="chart-column text-center">
@@ -86,18 +86,15 @@
 
                     <div id="income-dual-chart-container" class="mt-4">
                         <div class="chart-column">
-                            <h5 class="text-muted">Distribuição das despesas</h5>
+                            <h5 class="text-muted">Distribuição das rendas</h5>
                             <div id="income-chart"></div>
                         </div>
                         <div class="chart-column text-center">
-                            <h5 class="text-muted">Distribuição das despesas "Pizza"</h5>
+                            <h5 class="text-muted">Distribuição das rendas "Pizza"</h5>
                             <canvas id="income-pie-chart" width="300" height="300" class="chart-canvas"></canvas>
                             <div id="income-pie-legend" class="legend-box"></div>
                         </div>
                     </div>
-
-
-
                 </div>
             </div>
         </div>

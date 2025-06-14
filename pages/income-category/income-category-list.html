@@ -6,7 +6,7 @@
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <div>
                     <h2 class="mb-0">Categorias de Rendas</h2>
-                    <small class="text-muted">Gerenciamento de categoria de despesas cadastradas.</small>
+                    <small class="text-muted">Gerenciamento de categoria de rendas cadastradas.</small>
                 </div>
                 <button id="btn-income-category-insert" class="btn btn-primary btn-sm" onclick="loadContent('income-category', 'income-category-insert')">
                     ➕ Nova Categoria de Renda
@@ -34,8 +34,8 @@
                             <tr>
                                 <th class="text-center font-size">
                                     Nome
-                                    <button onclick="loadIncomesCategoriesOrdered(API_ROUTES.EXPENSE_CATEGORIES_ORDERED_ASYNC('Name', 'asc'))" class="sort-button asc">▲</button>
-                                    <button onclick="loadIncomesCategoriesOrdered(API_ROUTES.EXPENSE_CATEGORIES_ORDERED_ASYNC('Name', 'desc'))" class="sort-button desc">▼</button>
+                                    <button onclick="loadIncomesCategoriesOrdered(API_ROUTES.INCOME_CATEGORIES_ORDERED_ASYNC('Name', 'asc'))" class="sort-button asc">▲</button>
+                                    <button onclick="loadIncomesCategoriesOrdered(API_ROUTES.INCOME_CATEGORIES_ORDERED_ASYNC('Name', 'desc'))" class="sort-button desc">▼</button>
                                 </th>
                                 <th class="text-center font-size">Ações</th>
                             </tr>

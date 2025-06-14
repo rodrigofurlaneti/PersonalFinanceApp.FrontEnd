@@ -35,9 +35,9 @@ function validateExpenseFormFields() {
         { id: 'name', label: 'Nome' },
         { id: 'description', label: 'Descrição' },
         { id: 'amount', label: 'Valor' },
-        { id: 'dueDate', label: 'Vencimento' },
-        { id: 'paidAt', label: 'Pagamento' },
-        { id: 'expenseCategory', label: 'Categoria' }
+        { id: 'incomeDate', label: 'Vencimento' },
+        { id: 'receivedAt', label: 'Pagamento' },
+        { id: 'incomeCategory', label: 'Categoria' }
     ];
 
     for (const field of requiredFields) {
@@ -60,16 +60,16 @@ function validateExpenseFormFields() {
 function setTodayDate() {
     const today = new Date().toISOString().split('T')[0];
 
-    const dueDateInput = document.getElementById('dueDate');
-    const paidAtInput = document.getElementById('paidAt');
+    const incomeDateInput = document.getElementById('incomeDate');
+    const receivedAtInput = document.getElementById('receivedAt');
 
-    if (dueDateInput) dueDateInput.value = today;
-    if (paidAtInput) paidAtInput.value = today;
+    if (incomeDateInput) incomeDateInput.value = today;
+    if (receivedAtInput) receivedAtInput.value = today;
 }
 
 // 🔥 Carrega categorias no select
 async function loadExpenseCategories() {
-    const select = document.getElementById('expenseCategory');
+    const select = document.getElementById('incomeCategory');
     if (!select) return;
 
     try {
@@ -88,14 +88,14 @@ async function loadExpenseCategories() {
         });
 
     } catch (error) {
-        console.error('Erro ao buscar categorias de despesa:', error);
-        alert('Erro ao carregar categorias de despesa.');
+        console.error('Erro ao buscar categorias de renda:', error);
+        alert('Erro ao carregar categorias de renda.');
     }
 }
 
 // 🔥 Função que configura o formulário de cadastro
 function setupExpenseForm() {
-    const form = document.getElementById('expenseForm');
+    const form = document.getElementById('incomeForm');
     if (!form) {
         console.error('Formulário não encontrado');
         return;
@@ -115,9 +115,9 @@ function setupExpenseForm() {
             name: getInputValue('name'),
             description: getInputValue('description'),
             amount: parseCurrency(getInputValue('amount')),
-            dueDate: toIsoDate(getInputValue('dueDate')),
-            paidAt: toIsoDate(getInputValue('paidAt')),
-            expenseCategoryId: parseInt(getInputValue('expenseCategory')) || 0,
+            incomeDate: toIsoDate(getInputValue('incomeDate')),
+            receivedAt: toIsoDate(getInputValue('receivedAt')),
+            incomeCategoryId: parseInt(getInputValue('incomeCategory')) || 0,
             isActive: getCheckboxChecked('isActive'),
             createdAt: nowIso(),
             updatedAt: nowIso(),
@@ -126,7 +126,7 @@ function setupExpenseForm() {
         console.log('Enviando dados para API:', data);
 
         try {
-            const response = await fetch(API_ROUTES.EXPENSES_ASYNC, {
+            const response = await fetch(API_ROUTES.INCOMES_ASYNC, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -136,17 +136,17 @@ function setupExpenseForm() {
 
             if (!response.ok) {
                 const errorDetail = await response.text();
-                throw new Error(`Erro ao salvar despesa. Detalhe: ${errorDetail}`);
+                throw new Error(`Erro ao salvar renda. Detalhe: ${errorDetail}`);
             }
 
             Swal.fire({
                 timer: 4000,
-                title: `A despesa ${data.name} foi cadastrada com sucesso!`,
+                title: `A renda ${data.name} foi cadastrada com sucesso!`,
                 icon: "success",
                 draggable: true
             });
 
-            loadContent('expense', 'expense-list'); // Volta para a lista de despesas
+            loadContent('income', 'income-list'); // Volta para a lista de rendas
 
         } catch (error) {
             console.error('Erro:', error);
@@ -154,7 +154,7 @@ function setupExpenseForm() {
                 timer: 4000,
                 icon: "error",
                 title: "Oops...",
-                text: `Erro ao cadastrar a despesa ${data.name}!`,
+                text: `Erro ao cadastrar a renda ${data.name}!`,
                 footer: `<a href="#">${error.message}</a>`
             });
         }
@@ -165,27 +165,27 @@ function setupExpenseForm() {
 async function loadExpenseDataToForm() {
     const id = localStorage.getItem('editingExpenseId');
     if (!id) {
-        alert('ID da despesa não encontrado.');
+        alert('ID da renda não encontrado.');
         return;
     }
 
     try {
-        const url = API_ROUTES.EXPENSES_GETBYID_ASYNC.replace('{id}', id);
+        const url = API_ROUTES.INCOMES_GETBYID_ASYNC.replace('{id}', id);
         const response = await fetch(url);
-        if (!response.ok) throw new Error('Erro ao buscar despesa');
+        if (!response.ok) throw new Error('Erro ao buscar renda');
 
-        const expense = await response.json();
+        const income = await response.json();
 
         // Preenche campos
-        document.getElementById('name').value = expense.name;
-        document.getElementById('description').value = expense.description;
-        document.getElementById('amount').value = parseFloat(expense.amount).toFixed(2).replace('.', ',');
-        document.getElementById('dueDate').value = expense.dueDate.split('T')[0];
-        document.getElementById('paidAt').value = expense.paidAt ? expense.paidAt.split('T')[0] : '';
-        document.getElementById('isActive').checked = expense.isActive;
+        document.getElementById('name').value = income.name;
+        document.getElementById('description').value = income.description;
+        document.getElementById('amount').value = parseFloat(income.amount).toFixed(2).replace('.', ',');
+        document.getElementById('incomeDate').value = income.incomeDate.split('T')[0];
+        document.getElementById('receivedAt').value = income.receivedAt ? income.receivedAt.split('T')[0] : '';
+        document.getElementById('isActive').checked = income.isActive;
 
         // Carrega categorias
-        const categorySelect = document.getElementById('expenseCategory');
+        const categorySelect = document.getElementById('incomeCategory');
         const catResponse = await fetch(API_ROUTES.EXPENSE_CATEGORIES_ASYNC);
         const categories = await catResponse.json();
 
@@ -194,23 +194,23 @@ async function loadExpenseDataToForm() {
             const option = document.createElement('option');
             option.value = cat.id;
             option.text = cat.name;
-            if (cat.id === expense.expenseCategoryId) {
+            if (cat.id === income.incomeCategoryId) {
                 option.selected = true;
             }
             categorySelect.appendChild(option);
         });
 
         // Salva no localStorage para manter o createdAt
-        localStorage.setItem('editingExpenseCreatedAt', expense.createdAt);
+        localStorage.setItem('editingExpenseCreatedAt', income.createdAt);
 
     } catch (error) {
-        console.error('Erro ao carregar despesa:', error);
-        alert('Erro ao carregar despesa para edição.');
+        console.error('Erro ao carregar renda:', error);
+        alert('Erro ao carregar renda para edição.');
     }
 }
 
 function setupExpenseEditSubmit() {
-    const form = document.getElementById('expenseFormUpdate');
+    const form = document.getElementById('incomeFormUpdate');
     if (!form) return;
 
     form.addEventListener('submit', async function (e) {
@@ -226,16 +226,16 @@ function setupExpenseEditSubmit() {
             name: getInputValue('name'),
             description: getInputValue('description'),
             amount: parseCurrency(getInputValue('amount')),
-            dueDate: toIsoDate(getInputValue('dueDate')),
-            paidAt: toIsoDate(getInputValue('paidAt')),
-            expenseCategoryId: parseInt(getInputValue('expenseCategory')) || 0,
+            incomeDate: toIsoDate(getInputValue('incomeDate')),
+            receivedAt: toIsoDate(getInputValue('receivedAt')),
+            incomeCategoryId: parseInt(getInputValue('incomeCategory')) || 0,
             isActive: getCheckboxChecked('isActive'),
             createdAt,
             updatedAt: new Date().toISOString()
         };
 
         try {
-            const url = API_ROUTES.EXPENSES_UPDATE_ASYNC.replace('{id}', id);
+            const url = API_ROUTES.INCOMES_UPDATE_ASYNC.replace('{id}', id);
             const response = await fetch(url, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -246,21 +246,21 @@ function setupExpenseEditSubmit() {
 
             Swal.fire({
                 icon: 'success',
-                title: `A despesa ${updatedExpense.name} foi atualizada com sucesso!`,
+                title: `A renda ${updatedExpense.name} foi atualizada com sucesso!`,
                 timer: 4000,
                 showConfirmButton: false
             });
 
             localStorage.removeItem('editingExpenseId');
             localStorage.removeItem('editingExpenseCreatedAt');
-            loadContent('expense', 'expense-list');
+            loadContent('income', 'income-list');
 
         } catch (error) {
             console.error('Erro ao atualizar:', error);
             Swal.fire({
                 timer: 4000,
                 icon: 'error',
-                title: 'Erro ao atualizar despesa',
+                title: 'Erro ao atualizar renda',
                 text: error.message
             });
         }

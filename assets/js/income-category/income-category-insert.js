@@ -21,6 +21,7 @@ function validateIncomeCategoryFormFields() {
         Swal.fire({
             icon: 'warning',
             title: 'Campo obrigatório!',
+            timer: 4000,
             text: 'O campo "Nome" deve ser preenchido.',
         });
         return false;
@@ -80,6 +81,7 @@ function setupIncomeCategoryForm() {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
+                timer: 4000,
                 text: `Erro ao cadastrar a categoria de renda ${data.name}!`,
                 footer: `<a href="#">${error.message}</a>`
             });

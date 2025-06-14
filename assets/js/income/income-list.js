@@ -1,11 +1,11 @@
 const categoryColorMap = {};
 let categoryMap = {}; // id → nome
 
-// 🔁 Função padrão: carrega despesas sem ordenação
+// 🔁 Função padrão: carrega rendas sem ordenação
 async function loadExpenses() {
-    const tbody = document.getElementById('expense-table-body');
+    const tbody = document.getElementById('income-table-body');
     if (!tbody) {
-        console.error('Tabela de despesas não encontrada');
+        console.error('Tabela de rendas não encontrada');
         return;
     }
 
@@ -16,25 +16,25 @@ async function loadExpenses() {
         // ✅ agora carrega as categorias de fato
         categoryMap = await loadCategoryMap(); 
 
-        const response = await fetch(API_ROUTES.EXPENSES_ASYNC);
+        const response = await fetch(API_ROUTES.INCOMES_ASYNC);
 
         if (!response.ok) throw new Error('Erro ao buscar dados da API');
 
-        const expenses = await response.json();
+        const incomes = await response.json();
 
-        renderAllExpenseViews(expenses, API_ROUTES.EXPENSES_ASYNC);
+        renderAllExpenseViews(incomes, API_ROUTES.INCOMES_ASYNC);
 
     } catch (error) {
-        tbody.innerHTML = `<tr><td colspan="6">Erro ao carregar despesas: ${error.message}</td></tr>`;
-        console.error('Erro ao buscar despesas:', error);
+        tbody.innerHTML = `<tr><td colspan="6">Erro ao carregar rendas: ${error.message}</td></tr>`;
+        console.error('Erro ao buscar rendas:', error);
     }
 }
 
 // 🆕 Função com ordenação: recebe a URL da rota ordenada
 async function loadExpensesOrdered(apiUrl) {
-    const tbody = document.getElementById('expense-table-body');
+    const tbody = document.getElementById('income-table-body');
     if (!tbody) {
-        console.error('Tabela de despesas não encontrada');
+        console.error('Tabela de rendas não encontrada');
         return;
     }
 
@@ -48,62 +48,62 @@ async function loadExpensesOrdered(apiUrl) {
         
         if (!response.ok) throw new Error('Erro ao buscar dados ordenados da API');
 
-        const expenses = await response.json();
+        const incomes = await response.json();
 
-        renderAllExpenseViews(expenses, API_ROUTES.EXPENSES_ASYNC);
+        renderAllExpenseViews(incomes, API_ROUTES.INCOMES_ASYNC);
 
     } catch (error) {
         tbody.innerHTML = `<tr><td colspan="6">Erro: ${error.message}</td></tr>`;
-        console.error('Erro ao carregar despesas ordenadas:', error);
+        console.error('Erro ao carregar rendas ordenadas:', error);
     }
 
-    document.getElementById('expense-table-body').classList.add('loaded');
+    document.getElementById('income-table-body').classList.add('loaded');
 }
 
-// ♻️ Função reutilizável para renderizar despesas
-function renderExpenses(expenses, reloadUrl) {
+// ♻️ Função reutilizável para renderizar rendas
+function renderExpenses(incomes, reloadUrl) {
 
-    const tbody = document.getElementById('expense-table-body');
+    const tbody = document.getElementById('income-table-body');
 
     tbody.innerHTML = '';
 
-    if (!expenses || expenses.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6">Nenhuma despesa encontrada.</td></tr>';
+    if (!incomes || incomes.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6">Nenhuma renda encontrada.</td></tr>';
         return;
     }
 
     let total = 0;
 
-    expenses.forEach(expense => {
-        total += expense.amount;
+    incomes.forEach(income => {
+        total += income.amount;
 
-        const categoryName = categoryMap[expense.expenseCategoryId] || 'Sem categoria';
+        const categoryName = categoryMap[income.incomeCategoryId] || 'Sem categoria';
         
         // Cor padrão se não tiver no gráfico
         const categoryColor = categoryColorMap[categoryName] || '#6c757d'; 
 
         tbody.innerHTML += `
             <tr>
-                <td class="text-center font-size">${expense.name}</td>
-                <td class="text-center font-size">${expense.description}</td>
+                <td class="text-center font-size">${income.name}</td>
+                <td class="text-center font-size">${income.description}</td>
                 <td class="text-center font-size">
                     <span class="badge" style="background-color: ${categoryColor}; color: #fff;">
                         ${categoryName}
                     </span>
                 </td>
-                <td class="text-center font-size">R$ ${expense.amount.toFixed(2)}</td>
-                <td class="text-center font-size">${new Date(expense.dueDate).toLocaleDateString()}</td>
-                <td class="text-center font-size">${new Date(expense.paidAt).toLocaleDateString()}</td>
+                <td class="text-center font-size">R$ ${income.amount.toFixed(2)}</td>
+                <td class="text-center font-size">${new Date(income.incomeDate).toLocaleDateString()}</td>
+                <td class="text-center font-size">${new Date(income.receivedAt).toLocaleDateString()}</td>
                 <td class="text-center font-size">
-                    <button class="btn btn-warning btn-sm btn-expense-edit" 
+                    <button class="btn btn-warning btn-sm btn-income-edit" 
                             title="Editar"
-                            data-id="${expense.id}">
+                            data-id="${income.id}">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-sm btn-danger btn-expense-delete" 
+                    <button class="btn btn-sm btn-danger btn-income-delete" 
                             title="Excluir"
-                            data-id="${expense.id}" 
-                            data-name="${expense.description}"
+                            data-id="${income.id}" 
+                            data-name="${income.description}"
                             data-reload="${reloadUrl}">
                         <i class="fas fa-trash-alt"></i>
                     </button>
@@ -124,14 +124,14 @@ function renderExpenses(expenses, reloadUrl) {
         </tr>
     `;
 
-    document.querySelectorAll('.btn-expense-delete').forEach(button => {
+    document.querySelectorAll('.btn-income-delete').forEach(button => {
         button.addEventListener('click', async function () {
-            const expenseId = this.getAttribute('data-id');
-            const expenseName = this.getAttribute('data-name');
+            const incomeId = this.getAttribute('data-id');
+            const incomeName = this.getAttribute('data-name');
             const reloadUrl = this.getAttribute('data-reload');
 
             const result = await Swal.fire({
-                title: `Você deseja excluir a despesa "${expenseName}"?`,
+                title: `Você deseja excluir a renda "${incomeName}"?`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Sim',
@@ -140,22 +140,22 @@ function renderExpenses(expenses, reloadUrl) {
 
             if (result.isConfirmed) {
                 try {
-                    const deleteResponse = await fetch(`${API_ROUTES.EXPENSES_ASYNC}/${expenseId}`, {
+                    const deleteResponse = await fetch(`${API_ROUTES.INCOMES_ASYNC}/${incomeId}`, {
                         method: 'DELETE',
                     });
 
-                    if (!deleteResponse.ok) throw new Error('Erro ao excluir despesa');
+                    if (!deleteResponse.ok) throw new Error('Erro ao excluir renda');
 
                     Swal.fire({
                         icon: 'success',
                         title: 'Excluído!',
-                        text: `A despesa ${expenseName} foi excluída com sucesso.`,
+                        text: `A renda ${incomeName} foi excluída com sucesso.`,
                         timer: 4500,
                         showConfirmButton: false,
                     });
 
                     // Recarrega a partir da rota usada (ordenada ou não)
-                    if (reloadUrl === API_ROUTES.EXPENSES_ASYNC) {
+                    if (reloadUrl === API_ROUTES.INCOMES_ASYNC) {
                         loadExpenses();
                     } else {
                         loadExpensesOrdered(reloadUrl);
@@ -166,7 +166,7 @@ function renderExpenses(expenses, reloadUrl) {
                         timer: 4000,
                         icon: 'error',
                         title: 'Erro',
-                        text: `Falha ao excluir a despesa ${expenseName}, Erro: ${error.message}`,
+                        text: `Falha ao excluir a renda ${incomeName}, Erro: ${error.message}`,
                     });
                 }
             }
@@ -174,15 +174,15 @@ function renderExpenses(expenses, reloadUrl) {
     });
 
     // ✅ Adicione isso dentro da função renderExpenses
-    document.querySelectorAll('.btn-expense-edit').forEach(button => {
+    document.querySelectorAll('.btn-income-edit').forEach(button => {
         button.addEventListener('click', function () {
-            const expenseId = this.getAttribute('data-id');
-            localStorage.setItem('editingExpenseId', expenseId);
-            loadContent('expense', 'expense-update');
+            const incomeId = this.getAttribute('data-id');
+            localStorage.setItem('editingExpenseId', incomeId);
+            loadContent('income', 'income-update');
         });
     });
 
-    document.getElementById('expense-table-body').classList.add('loaded');
+    document.getElementById('income-table-body').classList.add('loaded');
 }
 
 
@@ -207,12 +207,12 @@ async function loadCategoryMap() {
 }
 
 // 🔥 Função que desenha o gráfico
-function renderExpenseChart(expenses) {
-    const container = document.getElementById('expense-chart');
+function renderExpenseChart(incomes) {
+    const container = document.getElementById('income-chart');
     if (!container) return;
 
     // Converter para número
-    const parsedExpenses = expenses.map(item => ({
+    const parsedExpenses = incomes.map(item => ({
         name: item.name,
         amount: typeof item.amount === 'number' ? item.amount : parseCurrency(item.amount)
     }));
@@ -226,14 +226,14 @@ function renderExpenseChart(expenses) {
         const percentage = ((item.amount / total) * 100).toFixed(2);
 
         const bar = document.createElement('div');
-        bar.classList.add('expense-bar');
+        bar.classList.add('income-bar');
 
         bar.innerHTML = `
-            <div class="expense-bar-label">${item.name}</div>
+            <div class="income-bar-label">${item.name}</div>
             <div style="flex: 1; background-color: #e9ecef; border-radius: 4px;">
-                <div class="expense-bar-fill" style="width: ${percentage}%; background-color: ${colors[index % colors.length]};"></div>
+                <div class="income-bar-fill" style="width: ${percentage}%; background-color: ${colors[index % colors.length]};"></div>
             </div>
-            <div class="expense-bar-percentage">${percentage}%</div>
+            <div class="income-bar-percentage">${percentage}%</div>
         `;
 
         container.appendChild(bar);
@@ -241,16 +241,16 @@ function renderExpenseChart(expenses) {
 }
 
 // 🔥 Função que desenha o gráfico por categoria.
-function renderExpenseChartByCategory(expenses) {
-    const container = document.getElementById('expense-category-chart');
+function renderExpenseChartByCategory(incomes) {
+    const container = document.getElementById('income-category-chart');
     if (!container) return;
 
     const categoryTotals = {};
 
-    // Agrupa despesas por categoria
-    expenses.forEach(expense => {
-        const categoryName = categoryMap[expense.expenseCategoryId] || 'Sem categoria';
-        const amount = typeof expense.amount === 'number' ? expense.amount : parseCurrency(expense.amount);
+    // Agrupa rendas por categoria
+    incomes.forEach(income => {
+        const categoryName = categoryMap[income.incomeCategoryId] || 'Sem categoria';
+        const amount = typeof income.amount === 'number' ? income.amount : parseCurrency(income.amount);
         categoryTotals[categoryName] = (categoryTotals[categoryName] || 0) + amount;
     });
 
@@ -266,14 +266,14 @@ function renderExpenseChartByCategory(expenses) {
         categoryColorMap[category] = colors[index % colors.length]; 
         
         const bar = document.createElement('div');
-        bar.classList.add('expense-bar');
+        bar.classList.add('income-bar');
 
         bar.innerHTML = `
-            <div class="expense-bar-label">${category}</div>
+            <div class="income-bar-label">${category}</div>
             <div style="flex: 1; background-color: #e9ecef; border-radius: 4px;">
-                <div class="expense-bar-fill" style="width: ${percentage}%; background-color: ${colors[index % colors.length]};"></div>
+                <div class="income-bar-fill" style="width: ${percentage}%; background-color: ${colors[index % colors.length]};"></div>
             </div>
-            <div class="expense-bar-percentage">${percentage}%</div>
+            <div class="income-bar-percentage">${percentage}%</div>
         `;
 
         container.appendChild(bar);
@@ -281,9 +281,9 @@ function renderExpenseChartByCategory(expenses) {
 }
 
 //Função para gráfico de rosca (donut)
-function renderExpenseDonutChart(expenses) {
-    const canvas = document.getElementById('expense-donut-chart');
-    const legend = document.getElementById('expense-donut-legend');
+function renderExpenseDonutChart(incomes) {
+    const canvas = document.getElementById('income-donut-chart');
+    const legend = document.getElementById('income-donut-legend');
     if (!canvas || !legend) return;
 
     const ctx = canvas.getContext('2d');
@@ -291,8 +291,8 @@ function renderExpenseDonutChart(expenses) {
     legend.innerHTML = '';
 
     const categoryTotals = {};
-    expenses.forEach(exp => {
-        const name = categoryMap[exp.expenseCategoryId] || 'Sem categoria';
+    incomes.forEach(exp => {
+        const name = categoryMap[exp.incomeCategoryId] || 'Sem categoria';
         const val = typeof exp.amount === 'number' ? exp.amount : parseCurrency(exp.amount);
         categoryTotals[name] = (categoryTotals[name] || 0) + val;
     });
@@ -330,16 +330,16 @@ function renderExpenseDonutChart(expenses) {
 
 
 //Função para desenhar o gráfico de pizza
-function renderExpensePieChart(expenses) {
-    const canvas = document.getElementById('expense-pie-chart');
-    const legend = document.getElementById('expense-pie-legend');
+function renderExpensePieChart(incomes) {
+    const canvas = document.getElementById('income-pie-chart');
+    const legend = document.getElementById('income-pie-legend');
     if (!canvas || !legend) return;
 
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     legend.innerHTML = '';
 
-    const parsed = expenses.map(e => ({
+    const parsed = incomes.map(e => ({
         label: e.name,
         value: typeof e.amount === 'number' ? e.amount : parseCurrency(e.amount)
     }));
@@ -384,17 +384,17 @@ async function filterExpensesByText() {
   }
 
   try {
-    const response = await fetch(API_ROUTES.EXPENSES_ASYNC);
+    const response = await fetch(API_ROUTES.INCOMES_ASYNC);
     const data = await response.json();
 
-    const filtered = data.filter(expense => {
-      const valueToCheck = (filterBy === "name" ? expense.name : expense.description) || "";
+    const filtered = data.filter(income => {
+      const valueToCheck = (filterBy === "name" ? income.name : income.description) || "";
       return valueToCheck.toLowerCase().includes(input);
     });
 
-    renderAllExpenseViews(filtered, API_ROUTES.EXPENSES_ASYNC);
+    renderAllExpenseViews(filtered, API_ROUTES.INCOMES_ASYNC);
   } catch (error) {
-    console.error("Erro ao filtrar despesas:", error);
+    console.error("Erro ao filtrar rendas:", error);
   }
 }
 
@@ -402,7 +402,7 @@ async function filterExpensesByText() {
 let debounceTimeout;
 
 function debounceFilterExpenses(delay = 300) {
-  const tbody = document.getElementById("expense-table-body");
+  const tbody = document.getElementById("income-table-body");
   if (tbody) {
     tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">Filtrando...</td></tr>`;
   }
@@ -413,20 +413,20 @@ function debounceFilterExpenses(delay = 300) {
   }, delay);
 }
 
-function renderAllExpenseViews(expenses, reloadUrl) {
+function renderAllExpenseViews(incomes, reloadUrl) {
     
-    // ✅ Chama a função para renderizar o gráfico de despesas 
-    renderExpenseChart(expenses);
+    // ✅ Chama a função para renderizar o gráfico de rendas 
+    renderExpenseChart(incomes);
     
-    // ✅ Chama a função para renderizar o gráfico de despesas por categoria ← gera o categoryColorMap
-    renderExpenseChartByCategory(expenses);
+    // ✅ Chama a função para renderizar o gráfico de rendas por categoria ← gera o categoryColorMap
+    renderExpenseChartByCategory(incomes);
 
-    // ✅ Chama a função para renderizar o gráfico de despesas pizza por nome
-    renderExpensePieChart(expenses);
+    // ✅ Chama a função para renderizar o gráfico de rendas pizza por nome
+    renderExpensePieChart(incomes);
 
-    // ✅ Chama a função para renderizar o gráfico de despesas Donut por categoria
-    renderExpenseDonutChart(expenses);
+    // ✅ Chama a função para renderizar o gráfico de rendas Donut por categoria
+    renderExpenseDonutChart(incomes);
 
-    // ✅ Chama a função para renderizar as despesas ← agora sim, com as cores certas
-    renderExpenses(expenses, reloadUrl);
+    // ✅ Chama a função para renderizar as rendas ← agora sim, com as cores certas
+    renderExpenses(incomes, reloadUrl);
 }

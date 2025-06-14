@@ -30,14 +30,14 @@ function nowIso() {
 }
 
 // 🔥 Define a validação de todos os campos
-function validateExpenseFormFields() {
+function validateIncomeFormFields() {
     const requiredFields = [
         { id: 'name', label: 'Nome' },
         { id: 'description', label: 'Descrição' },
         { id: 'amount', label: 'Valor' },
-        { id: 'dueDate', label: 'Vencimento' },
-        { id: 'paidAt', label: 'Pagamento' },
-        { id: 'expenseCategory', label: 'Categoria' }
+        { id: 'incomeDate', label: 'Vencimento' },
+        { id: 'receivedAt', label: 'Pagamento' },
+        { id: 'incomeCategory', label: 'Categoria' }
     ];
 
     for (const field of requiredFields) {
@@ -60,20 +60,20 @@ function validateExpenseFormFields() {
 function setTodayDate() {
     const today = new Date().toISOString().split('T')[0];
 
-    const dueDateInput = document.getElementById('dueDate');
-    const paidAtInput = document.getElementById('paidAt');
+    const incomeDateInput = document.getElementById('incomeDate');
+    const receivedAtInput = document.getElementById('receivedAt');
 
-    if (dueDateInput) dueDateInput.value = today;
-    if (paidAtInput) paidAtInput.value = today;
+    if (incomeDateInput) incomeDateInput.value = today;
+    if (receivedAtInput) receivedAtInput.value = today;
 }
 
 // 🔥 Carrega categorias no select
-async function loadExpenseCategories() {
-    const select = document.getElementById('expenseCategory');
+async function loadIncomeCategories() {
+    const select = document.getElementById('incomeCategory');
     if (!select) return;
 
     try {
-        const response = await fetch(API_ROUTES.EXPENSE_CATEGORIES_ASYNC);
+        const response = await fetch(API_ROUTES.INCOME_CATEGORIES_ASYNC);
         if (!response.ok) throw new Error('Erro ao carregar categorias.');
 
         const categories = await response.json();
@@ -88,36 +88,36 @@ async function loadExpenseCategories() {
         });
 
     } catch (error) {
-        console.error('Erro ao buscar categorias de despesa:', error);
-        alert('Erro ao carregar categorias de despesa.');
+        console.error('Erro ao buscar categorias de renda:', error);
+        alert('Erro ao carregar categorias de renda.');
     }
 }
 
 // 🔥 Função que configura o formulário de cadastro
-function setupExpenseForm() {
-    const form = document.getElementById('expenseForm');
+function setupIncomeForm() {
+    const form = document.getElementById('incomeForm');
     if (!form) {
         console.error('Formulário não encontrado');
         return;
     }
 
     setTodayDate();
-    loadExpenseCategories();
+    loadIncomeCategories();
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         // Valida os campos obrigatórios
-        if (!validateExpenseFormFields()) return;
+        if (!validateIncomeFormFields()) return;
 
         const data = {
             id: 0,
             name: getInputValue('name'),
             description: getInputValue('description'),
             amount: parseCurrency(getInputValue('amount')),
-            dueDate: toIsoDate(getInputValue('dueDate')),
-            paidAt: toIsoDate(getInputValue('paidAt')),
-            expenseCategoryId: parseInt(getInputValue('expenseCategory')) || 0,
+            incomeDate: toIsoDate(getInputValue('incomeDate')),
+            receivedAt: toIsoDate(getInputValue('receivedAt')),
+            incomeCategoryId: parseInt(getInputValue('incomeCategory')) || 0,
             isActive: getCheckboxChecked('isActive'),
             createdAt: nowIso(),
             updatedAt: nowIso(),
@@ -126,7 +126,7 @@ function setupExpenseForm() {
         console.log('Enviando dados para API:', data);
 
         try {
-            const response = await fetch(API_ROUTES.EXPENSES_ASYNC, {
+            const response = await fetch(API_ROUTES.INCOMES_ASYNC, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -136,17 +136,17 @@ function setupExpenseForm() {
 
             if (!response.ok) {
                 const errorDetail = await response.text();
-                throw new Error(`Erro ao salvar despesa ${data.name}. Detalhe: ${errorDetail}`);
+                throw new Error(`Erro ao salvar renda ${data.name}. Detalhe: ${errorDetail}`);
             }
 
             Swal.fire({
-                title: `A despesa ${data.name} foi cadastrada com sucesso!`,
+                title: `A renda ${data.name} foi cadastrada com sucesso!`,
                 timer: 4000,
                 icon: "success",
                 draggable: true
             });
 
-            loadContent('expense', 'expense-list'); // Volta para a lista de despesas
+            loadContent('income', 'income-list'); // Volta para a lista de rendas
 
         } catch (error) {
             console.error('Erro:', error);
@@ -154,7 +154,7 @@ function setupExpenseForm() {
                 icon: "error",
                 timer: 4000,
                 title: "Oops...",
-                text: `Erro ao cadastrar a despesa ${data.name}!`,
+                text: `Erro ao cadastrar a renda ${data.name}!`,
                 footer: `<a href="#">${error.message}</a>`
             });
         }

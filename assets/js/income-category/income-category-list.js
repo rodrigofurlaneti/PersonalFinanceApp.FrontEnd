@@ -138,6 +138,7 @@ function renderIncomesCategories(incomeCategories, reloadUrl) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Erro',
+                        timer: 4000,
                         text: `Falha ao excluir a categoria de renda "${incomeCategoryName}" Erro: ${error.message}`,
                     });
                 }

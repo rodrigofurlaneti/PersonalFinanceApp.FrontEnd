@@ -172,7 +172,7 @@ function setupExpenseCategoryEditSubmit() {
             Swal.fire({
                 icon: 'success',
                 title: `A categoria de despesa ${updatedExpenseCategory.name} atualizada com sucesso!`,
-                timer: 2000,
+                timer: 4000,
                 showConfirmButton: false
             });
 
@@ -184,6 +184,7 @@ function setupExpenseCategoryEditSubmit() {
             console.error('Erro ao atualizar:', error);
             Swal.fire({
                 icon: 'error',
+                timer: 4000,
                 title: `Erro ao atualizar categoria de despesa ${updatedExpenseCategory.name}`,
                 text: error.message
             });

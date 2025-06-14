@@ -136,6 +136,7 @@ function renderExpensesCategories(expenseCategories, reloadUrl) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Erro',
+                        timer: 4000,
                         text: `Falha ao excluir categoria despesa: ${error.message}`,
                     });
                 }
