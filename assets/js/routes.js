@@ -15,8 +15,11 @@ const API_ROUTES = {
     EXPENSES_UPDATE_ASYNC: `${API_BASE_URL}/expenses/async/{id}`,
     EXPENSES_UPDATE_SYNC: `${API_BASE_URL}/expenses/sync/{id}`,
     INCOME: `${API_BASE_URL}/incomes/async`,
-    EXPENSE_CATEGORY_ASYNC: `${API_BASE_URL}/expense-categories/async`,
-    EXPENSE_CATEGORY_SYNC: `${API_BASE_URL}/expense-categories/sync`,
+    EXPENSES_CATEGORIES_ASYNC: `${API_BASE_URL}/expense-categories/async`,
+    EXPENSES_CATEGORIES_SYNC: `${API_BASE_URL}/expense-categories/sync`,
+    EXPENSES_CATEGORIES_ORDERED_ASYNC: (orderBy, direction = 'asc') => `${API_BASE_URL}/expenses-categories/async/ordered?orderBy=${orderBy}&direction=${direction}`,
+    EXPENSES_CATEGORIES_ORDERED_SYNC: (orderBy, direction = 'asc') => `${API_BASE_URL}/expenses-categories/sync/ordered?orderBy=${orderBy}&direction=${direction}`,
+    EXPENSES_CATEGORIES_FILTERED_ASYNC: (filterBy, value) => `${API_BASE_URL}/expenses-categories/async/filtered?filterBy=${filterBy}&value=${encodeURIComponent(value)}`,
     INCOME_CATEGORY: `${API_BASE_URL}/income-categories/async`,
     CONFIG: `${API_BASE_URL}/settings/async`,
 };

@@ -43,10 +43,10 @@ function handlePageLoad(model, page) {
             loadExpenseDataToForm();
             setupExpenseEditSubmit();
             break;
-        case 'expensecategory/expensecategory-list':
+        case 'expense-category/expense-category-list':
             loadExpensesCategories();
             break;
-        case 'expensecategory/expensecategory-insert':
+        case 'expense-category/expense-category-insert':
             setupExpenseCategoryForm();
             break;
         default:

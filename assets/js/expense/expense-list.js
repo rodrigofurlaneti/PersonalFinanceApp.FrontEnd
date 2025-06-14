@@ -189,7 +189,7 @@ function renderExpenses(expenses, reloadUrl) {
 // 🔥 Função carrega as categorias
 async function loadCategoryMap() {
     try {
-        const response = await fetch(API_ROUTES.EXPENSE_CATEGORY_ASYNC);
+        const response = await fetch(API_ROUTES.EXPENSES_CATEGORIES_ASYNC);
         if (!response.ok) throw new Error('Erro ao carregar categorias');
 
         const categories = await response.json();
